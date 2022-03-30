@@ -26,7 +26,9 @@ namespace CargoEnvMon.Reader.Infrastructure
                 }
             } while (bytes != 0);
 
-            return messageData.ToString();
+            return messageData
+                .Replace("<EOF>", "")
+                .ToString();
         }
     }
 }
