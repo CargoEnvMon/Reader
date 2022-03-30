@@ -1,14 +1,45 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:CargoEnvMon.Reader"
-             x:Class="CargoEnvMon.Reader.MainPage">
+             xmlns:viewModels="clr-namespace:CargoEnvMon.Reader.ViewModels;assembly=CargoEnvMon.Reader"
+             x:Class="CargoEnvMon.Reader.MainPage"
+             Padding="5" x:DataType="local:MainPage">
 
     <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
-    </StackLayout>
+        <Entry Placeholder="Shipment id" Text="{Binding ShipmentId}" IsEnabled="{Binding EnableEntry}" />
+        <Button Text="{Binding ButtonText}" Clicked="Button_OnClicked" />
 
+        <ListView ItemsSource="{Binding CargoRequestResults}" Margin="0, 5, 00, 0">
+            <ListView.Header>
+                <Grid Margin="0, 0, 0, 5" Padding="10, 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="#" FontAttributes="Bold"></Label>
+                    <Label Grid.Column="1" Text="Cargo Id" FontAttributes="Bold"></Label>
+                    <Label Grid.Column="2" Text="Status" FontAttributes="Bold"></Label>
+                </Grid>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid x:DataType="viewModels:CargoRequestViewModel" VerticalOptions="Center" Padding="10, 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="3*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="{Binding Index}" VerticalOptions="Center"/>
+                            <Label Grid.Column="1" Text="{Binding CargoId}" VerticalOptions="Center"/>
+                            <Label Grid.Column="2" Text="{Binding Text}" VerticalOptions="Center"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
 </ContentPage>
