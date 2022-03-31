@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using CargoEnvMon.Reader.Infrastructure;
+using CargoEnvMon.Reader.Infrastructure.Abstractions;
 
 namespace CargoEnvMon.Reader.Models
 {

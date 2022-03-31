@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
+using CargoEnvMon.Reader.Infrastructure.Abstractions;
 
 namespace CargoEnvMon.Reader.Infrastructure
 {

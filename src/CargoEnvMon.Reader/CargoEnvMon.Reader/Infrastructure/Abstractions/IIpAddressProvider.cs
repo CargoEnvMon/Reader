@@ -1,4 +1,4 @@
-namespace CargoEnvMon.Reader.Infrastructure
+namespace CargoEnvMon.Reader.Infrastructure.Abstractions
 {
     public interface IIpAddressProvider
     {

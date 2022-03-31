@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using CargoEnvMon.Reader.Infrastructure.Abstractions;
 using CargoEnvMon.Reader.Models;
 using CargoEnvMon.Reader.Models.Client;
 using CargoEnvMon.Reader.ViewModels;
