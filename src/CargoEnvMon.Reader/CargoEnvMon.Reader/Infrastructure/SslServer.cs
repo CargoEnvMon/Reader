@@ -13,16 +13,17 @@ namespace CargoEnvMon.Reader.Infrastructure
     {
         private const int PORT = 9021;
         private readonly TcpListener listener;
-        private readonly X509Certificate certificate;
+        //private readonly X509Certificate certificate;
         private Thread thread;
 
 
-        public SslServer(IIpAddressProvider ipAddressProvider, ISslCertificateProvider certificateProvider)
+        //public SslServer(IIpAddressProvider ipAddressProvider, ISslCertificateProvider certificateProvider)
+        public SslServer(IIpAddressProvider ipAddressProvider)
         {
             listener = new TcpListener(
                 new IPAddress(ipAddressProvider.GetIpAddressBytes()),
                 PORT);
-            certificate = certificateProvider.GetCertificate();
+            //certificate = certificateProvider.GetCertificate();
         }
 
         protected abstract string GetResponse(string request);
@@ -53,13 +54,15 @@ namespace CargoEnvMon.Reader.Infrastructure
 
         private void ProcessClient(TcpClient client)
         {
-            using var sslStream = new SslStream(client.GetStream(), false);
+            //using var networkStream = new SslStream(client.GetStream(), false);
+            using var networkStream = client.GetStream();
             try
             {
-                sslStream.AuthenticateAsServer(certificate);
-                var message = SslStreamHelper.ReadUntilEof(sslStream);
+                //networkStream.AuthenticateAsServer(certificate);
+                var message = StreamHelper.ReadUntilEof(networkStream);
                 var responseMessage = GetResponse(message);
-                sslStream.Write(Encoding.Default.GetBytes(responseMessage));
+                var responseData = Encoding.Default.GetBytes(responseMessage);
+                networkStream.Write(responseData, 0, responseData.Length);
             }
             catch (Exception e)
             {
@@ -67,7 +70,7 @@ namespace CargoEnvMon.Reader.Infrastructure
             }
             finally
             {
-                sslStream.Close();
+                networkStream.Close();
                 client.Close();
             }
         }

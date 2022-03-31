@@ -1,11 +1,12 @@
+using System.IO;
 using System.Net.Security;
 using System.Text;
 
 namespace CargoEnvMon.Reader.Infrastructure
 {
-    public static class SslStreamHelper
+    public static class StreamHelper
     {
-        public static string ReadUntilEof(SslStream stream)
+        public static string ReadUntilEof(Stream stream)
         {
             var buffer = new byte[2048];
             var messageData = new StringBuilder();

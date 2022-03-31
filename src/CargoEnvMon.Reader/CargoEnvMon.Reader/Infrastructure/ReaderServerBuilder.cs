@@ -16,11 +16,8 @@ namespace CargoEnvMon.Reader.Infrastructure
                 GetClient(),
                 (res, id) => onCompleted(CargoRequestViewModelMapper.Map(res, id))
             );
-            return new ReaderServer(
-                DependencyService.Get<IIpAddressProvider>(),
-                DependencyService.Get<ISslCertificateProvider>(),
-                processor
-            );
+            
+            return new ReaderServer(DependencyService.Get<IIpAddressProvider>(), processor);
         }
 
         private static StorageClient GetClient()

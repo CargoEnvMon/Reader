@@ -8,11 +8,8 @@ namespace CargoEnvMon.Reader.Models
     {
         private readonly MeasurementRequestProcessor requestProcessor;
 
-        public ReaderServer(
-            IIpAddressProvider ipAddressProvider,
-            ISslCertificateProvider certificateProvider,
-            MeasurementRequestProcessor requestProcessor
-        ) : base(ipAddressProvider, certificateProvider)
+        public ReaderServer(IIpAddressProvider ipAddressProvider, MeasurementRequestProcessor requestProcessor)
+            : base(ipAddressProvider)
         {
             this.requestProcessor = requestProcessor;
         }

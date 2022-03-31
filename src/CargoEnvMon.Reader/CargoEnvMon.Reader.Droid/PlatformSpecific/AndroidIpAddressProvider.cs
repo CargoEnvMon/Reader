@@ -12,7 +12,7 @@ namespace CargoEnvMon.Reader.Droid.PlatformSpecific
     {
         public byte[] GetIpAddressBytes()
         {
-            var wifiManager = Application.Context.GetSystemService(Context.WifiService) as WifiManager;
+            var wifiManager = WiFiManagerProvider.GetWifiManager();
             var ip = wifiManager!.ConnectionInfo!.IpAddress;
             return new IPAddress(ip).GetAddressBytes();
         }

@@ -51,6 +51,7 @@
     <ItemGroup>
         <Compile Include="MainActivity.cs" />
         <Compile Include="PlatformSpecific\AndroidIpAddressProvider.cs" />
+        <Compile Include="PlatformSpecific\WiFiManagerProvider.cs" />
         <Compile Include="Resources\Resource.Designer.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
