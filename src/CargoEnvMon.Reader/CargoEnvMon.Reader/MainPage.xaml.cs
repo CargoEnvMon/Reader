@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using CargoEnvMon.Reader.Infrastructure;
+using CargoEnvMon.Reader.Models;
 using CargoEnvMon.Reader.ViewModels;
+using Xamarin.Forms;
 
 namespace CargoEnvMon.Reader
 {
@@ -35,11 +38,33 @@ namespace CargoEnvMon.Reader
 
         public ObservableCollection<CargoRequestViewModel> CargoRequestResults { get; } = new();
 
+        private readonly ReaderServer readerServer;
+
         public MainPage()
         {
             InitializeComponent();
             BindingContext = this;
             ButtonText = "Start";
+            readerServer = ReaderServerBuilder.Build(OnRequestCompleted);
+        }
+
+        private void OnRequestCompleted(CargoRequestViewModel viewModel)
+        {
+            viewModel.Index = CargoRequestResults.Count + 1;
+            CargoRequestResults.Add(viewModel);
+        }
+
+        private async void OnCellClicked(object sender, EventArgs args)
+        {
+            var viewModel = (sender as ViewCell)!.BindingContext as CargoRequestViewModel;
+            if (!viewModel!.IsSuccess)
+            {
+                await DisplayAlert(
+                    $"Cargo \"{viewModel.CargoId}\" error",
+                    viewModel.Message,
+                    "Ok"
+                );
+            }
         }
 
         private void Button_OnClicked(object sender, EventArgs e)
@@ -47,14 +72,14 @@ namespace CargoEnvMon.Reader
             IsStarted = !IsStarted;
             if (IsStarted)
             {
+                readerServer.Start();
                 ButtonText = "Stop";
             }
             else
             {
-                ButtonText  = "Start";
+                readerServer.Stop();
+                ButtonText = "Start";
             }
-            
-            CargoRequestResults.Add(new CargoRequestViewModel(CargoRequestResults.Count, new Random().Next().ToString(), isStarted));
         }
     }
 }

@@ -13,6 +13,7 @@ namespace CargoEnvMon.Reader.Infrastructure
         private const int PORT = 9021;
         private readonly TcpListener listener;
         private readonly X509Certificate certificate;
+        private Thread thread;
 
 
         public SslServer(IIpAddressProvider ipAddressProvider, ISslCertificateProvider certificateProvider)
@@ -27,17 +28,26 @@ namespace CargoEnvMon.Reader.Infrastructure
 
         public void Start()
         {
-            new Thread(() =>
+            thread = new Thread(() =>
             {
                 listener.Start();
-                Thread.CurrentThread.IsBackground = true;
                 while (true)
                 {
                     var client = listener.AcceptTcpClient();
                     ProcessClient(client);
                 }
                 // ReSharper disable once FunctionNeverReturns
-            }).Start();
+            })
+            {
+                IsBackground = true
+            };
+            thread.Start();
+        }
+
+        public void Stop()
+        {
+            thread.Abort();
+            listener.Stop();
         }
 
         private void ProcessClient(TcpClient client)
@@ -65,6 +75,7 @@ namespace CargoEnvMon.Reader.Infrastructure
         {
             try
             {
+                thread.Abort();
                 listener.Stop();
             }
             catch
