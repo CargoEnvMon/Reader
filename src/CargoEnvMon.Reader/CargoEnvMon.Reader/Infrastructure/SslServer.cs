@@ -66,7 +66,7 @@ namespace CargoEnvMon.Reader.Infrastructure
             }
             catch (Exception e)
             {
-
+                ExceptionsHandler.Handle(e);
             }
             finally
             {

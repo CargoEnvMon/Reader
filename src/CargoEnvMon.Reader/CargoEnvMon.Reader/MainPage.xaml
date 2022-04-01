@@ -10,7 +10,8 @@
     <StackLayout>
         <Entry Placeholder="Shipment id" Text="{Binding ShipmentId}" IsEnabled="{Binding EnableEntry}" />
         <Button Text="{Binding ButtonText}" Clicked="Button_OnClicked" />
-
+        <Label Padding="5" Text="{Binding ExceptionText}" BackgroundColor="Pink" TextColor="Black"></Label>
+        
         <ListView ItemsSource="{Binding CargoRequestResults}" 
                   Margin="0, 5, 0, 0" 
                   SelectionMode="None" 

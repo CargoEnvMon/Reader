@@ -36,16 +36,35 @@ namespace CargoEnvMon.Reader
 
         public string ShipmentId { get; set; }
 
+        public string ExceptionText
+        {
+            get => exceptionText;
+            set
+            {
+                exceptionText = value;
+                OnPropertyChanged(nameof(ExceptionText));
+            }
+        }
+
         public ObservableCollection<CargoRequestViewModel> CargoRequestResults { get; } = new();
 
         private readonly ReaderServer readerServer;
+        private string exceptionText;
 
         public MainPage()
         {
             InitializeComponent();
             BindingContext = this;
             ButtonText = "Start";
-            readerServer = ReaderServerBuilder.Build(OnRequestCompleted);
+            ExceptionsHandler.OnHandle(e => ExceptionText = e);
+            try
+            {
+                readerServer = ReaderServerBuilder.Build(OnRequestCompleted);
+            }
+            catch (Exception e)
+            {
+                ExceptionsHandler.Handle(e);
+            }
         }
 
         private void OnRequestCompleted(CargoRequestViewModel viewModel)
@@ -72,6 +91,7 @@ namespace CargoEnvMon.Reader
             IsStarted = !IsStarted;
             if (IsStarted)
             {
+                readerServer.SetShipmentId(ShipmentId);
                 readerServer.Start();
                 ButtonText = "Stop";
             }

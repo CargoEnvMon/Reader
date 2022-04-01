@@ -37,8 +37,9 @@ namespace CargoEnvMon.Reader.Models
                 var result = await client.SaveCargo(saveRequest);
                 onCompleted(result, saveRequest.CargoId);
             }
-            catch
+            catch (Exception e)
             {
+                ExceptionsHandler.Handle(e);
             }
         }
     }
