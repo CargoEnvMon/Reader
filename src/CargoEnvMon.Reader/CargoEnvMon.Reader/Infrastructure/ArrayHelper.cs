@@ -1,3 +1,5 @@
+using System.Globalization;
+
 #nullable enable
 
 namespace CargoEnvMon.Reader.Infrastructure
@@ -18,7 +20,7 @@ namespace CargoEnvMon.Reader.Infrastructure
         
         public static float? TryGetFloatFromIndex(this string[] arr, int index)
         {
-            return float.TryParse(arr.TryGetFromIndex(index), out var val)
+            return float.TryParse(arr.TryGetFromIndex(index), NumberStyles.Any, CultureInfo.InvariantCulture, out var val)
                 ? val
                 : null;
         }

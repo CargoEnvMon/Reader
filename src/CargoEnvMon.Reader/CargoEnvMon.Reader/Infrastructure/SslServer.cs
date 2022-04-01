@@ -11,7 +11,7 @@ namespace CargoEnvMon.Reader.Infrastructure
 {
     public abstract class SslServer : IDisposable
     {
-        private const int PORT = 9021;
+        public const int PORT = 9021;
         private readonly TcpListener listener;
         //private readonly X509Certificate certificate;
         private Thread thread;

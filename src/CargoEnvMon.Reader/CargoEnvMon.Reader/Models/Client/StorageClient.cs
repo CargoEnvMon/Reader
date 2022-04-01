@@ -34,7 +34,7 @@ namespace CargoEnvMon.Reader.Models.Client
             }
             catch (Exception e)
             {
-                return new Result(false, "Exception occured", e);
+                return new Result(false, $"Exception occured: {e}");
             }
         }
 

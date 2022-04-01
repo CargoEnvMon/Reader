@@ -24,7 +24,7 @@ namespace CargoEnvMon.Reader.Infrastructure
         {
             var client = new HttpClient
             {
-                BaseAddress = new Uri("")
+                BaseAddress = new Uri("http://192.168.1.34:5000")
             };
             return new StorageClient(client);
         }

@@ -9,6 +9,8 @@ namespace CargoEnvMon.Reader.Models
     {
         private readonly StorageClient client;
         private readonly Action<Result, string> onCompleted;
+        
+        public string ShipmentId { get; set; }
 
         public MeasurementRequestProcessor(
             StorageClient client,
@@ -26,9 +28,12 @@ namespace CargoEnvMon.Reader.Models
                 var saveRequest = MeasurementRequestParser.Parse(request);
                 if (saveRequest == null)
                 {
+                    var emptyReqRes = new Result(false, "Invalid request received");
+                    onCompleted(emptyReqRes, "");
                     return;
                 }
 
+                saveRequest.ShipmentId = ShipmentId;
                 var result = await client.SaveCargo(saveRequest);
                 onCompleted(result, saveRequest.CargoId);
             }
