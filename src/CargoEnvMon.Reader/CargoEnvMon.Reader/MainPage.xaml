@@ -8,9 +8,15 @@
              Padding="5" x:DataType="local:MainPage">
 
     <StackLayout>
+        <Entry Placeholder="Storage server url" Text="{Binding BaseUrl}" IsEnabled="{Binding EnableEntry}" />
         <Entry Placeholder="Shipment id" Text="{Binding ShipmentId}" IsEnabled="{Binding EnableEntry}" />
         <Button Text="{Binding ButtonText}" Clicked="Button_OnClicked" />
-        <Label Padding="5" Text="{Binding ExceptionText}" BackgroundColor="Pink" TextColor="Black"></Label>
+        <Label Padding="5" 
+               Text="{Binding ExceptionText}"
+               BackgroundColor="Pink"
+               TextColor="Black"
+               IsVisible="{Binding IsExceptionVisible}"
+               ></Label>
         
         <ListView ItemsSource="{Binding CargoRequestResults}" 
                   Margin="0, 5, 0, 0" 

@@ -9,16 +9,20 @@ namespace CargoEnvMon.Reader.Models
     {
         private readonly StorageClient client;
         private readonly Action<Result, string> onCompleted;
-        
-        public string ShipmentId { get; set; }
+
+        private readonly string shipmentId;
+        private readonly string baseUrl;
 
         public MeasurementRequestProcessor(
             StorageClient client,
-            Action<Result, string> onCompleted
-        )
+            Action<Result, string> onCompleted, 
+            string shipmentId,
+            string baseUrl)
         {
             this.client = client;
             this.onCompleted = onCompleted;
+            this.shipmentId = shipmentId;
+            this.baseUrl = baseUrl;
         }
 
         public async Task Process(string request)
@@ -33,8 +37,8 @@ namespace CargoEnvMon.Reader.Models
                     return;
                 }
 
-                saveRequest.ShipmentId = ShipmentId;
-                var result = await client.SaveCargo(saveRequest);
+                saveRequest.ShipmentId = shipmentId;
+                var result = await client.SaveCargo(baseUrl, saveRequest);
                 onCompleted(result, saveRequest.CargoId);
             }
             catch (Exception e)

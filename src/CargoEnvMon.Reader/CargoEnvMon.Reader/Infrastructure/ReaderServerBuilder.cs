@@ -1,5 +1,4 @@
 using System;
-using System.Net.Http;
 using CargoEnvMon.Reader.Infrastructure.Abstractions;
 using CargoEnvMon.Reader.Models;
 using CargoEnvMon.Reader.Models.Client;
@@ -10,23 +9,20 @@ namespace CargoEnvMon.Reader.Infrastructure
 {
     public static class ReaderServerBuilder
     {
-        public static ReaderServer Build(Action<CargoRequestViewModel> onCompleted)
+        public static ReaderServer Build(
+            Action<CargoRequestViewModel> onCompleted,
+            string shipmentId,
+            string baseUrl
+        )
         {
             var processor = new MeasurementRequestProcessor(
-                GetClient(),
-                (res, id) => onCompleted(CargoRequestViewModelMapper.Map(res, id))
+                new StorageClient(),
+                (res, id) => onCompleted(CargoRequestViewModelMapper.Map(res, id)),
+                shipmentId,
+                baseUrl
             );
-            
-            return new ReaderServer(DependencyService.Get<IIpAddressProvider>(), processor);
-        }
 
-        private static StorageClient GetClient()
-        {
-            var client = new HttpClient
-            {
-                BaseAddress = new Uri("http://192.168.1.34:5000")
-            };
-            return new StorageClient(client);
+            return new ReaderServer(DependencyService.Get<IIpAddressProvider>(), processor);
         }
     }
 }

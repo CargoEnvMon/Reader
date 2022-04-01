@@ -35,6 +35,7 @@ namespace CargoEnvMon.Reader
         }
 
         public string ShipmentId { get; set; }
+        public string BaseUrl { get; set; }
 
         public string ExceptionText
         {
@@ -43,12 +44,14 @@ namespace CargoEnvMon.Reader
             {
                 exceptionText = value;
                 OnPropertyChanged(nameof(ExceptionText));
+                OnPropertyChanged(nameof(IsExceptionVisible));
             }
         }
 
+        public bool IsExceptionVisible => !string.IsNullOrEmpty(ExceptionText);
+
         public ObservableCollection<CargoRequestViewModel> CargoRequestResults { get; } = new();
 
-        private readonly ReaderServer readerServer;
         private string exceptionText;
 
         public MainPage()
@@ -57,14 +60,6 @@ namespace CargoEnvMon.Reader
             BindingContext = this;
             ButtonText = "Start";
             ExceptionsHandler.OnHandle(e => ExceptionText = e);
-            try
-            {
-                readerServer = ReaderServerBuilder.Build(OnRequestCompleted);
-            }
-            catch (Exception e)
-            {
-                ExceptionsHandler.Handle(e);
-            }
         }
 
         private void OnRequestCompleted(CargoRequestViewModel viewModel)
@@ -86,12 +81,20 @@ namespace CargoEnvMon.Reader
             }
         }
 
+        private ReaderServer readerServer;
+        
         private void Button_OnClicked(object sender, EventArgs e)
         {
             IsStarted = !IsStarted;
             if (IsStarted)
             {
-                readerServer.SetShipmentId(ShipmentId);
+                readerServer = GetReaderServer();
+                if (readerServer == null)
+                {
+                    IsStarted = false;
+                    return;
+                }
+                
                 readerServer.Start();
                 ButtonText = "Stop";
             }
@@ -99,6 +102,19 @@ namespace CargoEnvMon.Reader
             {
                 readerServer.Stop();
                 ButtonText = "Start";
+            }
+        }
+
+        private ReaderServer GetReaderServer()
+        {
+            try
+            {
+                return ReaderServerBuilder.Build(OnRequestCompleted, ShipmentId, BaseUrl);
+            }
+            catch (Exception e)
+            {
+                ExceptionsHandler.Handle(e);
+                return null;
             }
         }
     }

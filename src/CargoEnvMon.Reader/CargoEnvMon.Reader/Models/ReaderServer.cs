@@ -14,11 +14,6 @@ namespace CargoEnvMon.Reader.Models
             this.requestProcessor = requestProcessor;
         }
 
-        public void SetShipmentId(string shipmentId)
-        {
-            requestProcessor.ShipmentId = shipmentId;
-        }
-
         protected override string GetResponse(string request)
         {
             Task.Run(() => requestProcessor.Process(request));

@@ -11,19 +11,22 @@ namespace CargoEnvMon.Reader.Models.Client
     {
         private readonly HttpClient httpClient;
 
-        public StorageClient(HttpClient httpClient)
+        public StorageClient()
         {
-            this.httpClient = httpClient;
+            httpClient = new HttpClient()
+            {
+                Timeout = TimeSpan.FromSeconds(10),
+            };
         }
 
-        public async Task<Result> SaveCargo(SaveCargoRequest model)
+        public async Task<Result> SaveCargo(string baseUrl, SaveCargoRequest model)
         {
             var str = JsonConvert.SerializeObject(model);
             var request = new StringContent(str, Encoding.Default, "application/json");
 
             try
             {
-                var response = await httpClient.PostAsync(new Uri("/api/cargo"), request);
+                var response = await httpClient.PostAsync(new Uri($"{baseUrl}/api/cargo"), request);
                 if (response.IsSuccessStatusCode)
                 {
                     return Result.Success;
